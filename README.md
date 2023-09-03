@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+## About Project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hello,
+I created Business Loan application system. I used React as the frontend framework and javascript and Firebase for the backend.
 
-## Available Scripts
+# Features:
 
-In the project directory, you can run:
+- User SignIn/SignUp/LogIn
+- User will Fill Business Details & Loan amount, Select Accounting provider and Request Balance Sheet
+- Backend will give Return Details for Review and Application Result
+- There are requestDecision, applyRule and useFetchDecision there are responsible for made call for Accounting Software and Decision Engine
+- applyRule - Contains Rules to be applied before sending to Decision Engine
+- requestDecision - Contains code for calling Decision Engine
+- useFetchDecision - Contains code for fetch API for handling data from server.
+- Tool: React, React-Router, Custom Hook, Firebase, SCSS, and hooks
 
-### `npm start`
+## Requirement
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The goal of the project is to build a simple business loan application system.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The system consists of the following:
 
-### `npm test`
+- Frontend
+- Backend
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The backend would integrate with third-party providers such as:
 
-### `npm run build`
+- Decision engine - This is where the final application will be
+  submitted to present the outcome of the application.
+- Accounting software providers will provide a balance sheet for a selected business of the user.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Below is a sequence diagram to help visually understand the flow.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```mermaid
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+sequenceDiagram
+  Actor User as User
+  participant FE as Frontend
+  participant BE as Backend
+  participant ASP as Accounting Software
+  participant DE as Decision Engine
 
-### `npm run eject`
+  User ->> FE: Start Application
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+  FE ->> BE: Initiate Application
+  BE ->> FE: Initiate Complete
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  User ->> FE: Fill Business Details & Loan amount
+  User ->> FE: Select Accounting provider
+  User ->> FE: Request Balance Sheet
+  FE ->> BE: Fetch Balance Sheet
+  BE ->> ASP: Request Balance Sheet
+  ASP ->> BE: Return Balance Sheet
+  BE ->> FE: Return Details for Review
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+  User --> FE: Review Complete
+  User ->> FE: Submit Application
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+  FE ->> BE: Request outcome
+  BE ->> BE: Apply Rules to summarise application
+  BE ->> DE: Request Decision
+  DE ->> BE: Returns outcome
 
-## Learn More
+  BE ->> FE: Application Result
+  FE ->> User: Final Outcome
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Assumptions:
 
-### Code Splitting
+- You may choose from the following language: Javascript, Typescript, Python, Golang / HTML, CSS.
+- For frontend, you could use a framework such as React / Vue, though basic HTML is also acceptable.
+- The accounting software and decision engine are already implemented. The backend should provide a simulation of the above.
+- The frontend can be very basic.
+- The accounting provider option on frontend would include Xero, MYOB and more in future.
+- A sample balance sheet received from Accounting provider:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```json
 
-### Analyzing the Bundle Size
+sheet = [
+    {
+        "year": 2020,
+        "month": 12,
+        "profitOrLoss": 250000,
+        "assetsValue": 1234
+    },
+    {
+        "year": 2020,
+        "month": 11,
+        "profitOrLoss": 1150,
+        "assetsValue": 5789
+    },
+    {
+        "year": 2020,
+        "month": 10,
+        "profitOrLoss": 2500,
+        "assetsValue": 22345
+    },
+    {
+        "year": 2020,
+        "month": 9,
+        "profitOrLoss": -187000,
+        "assetsValue": 223452
+    }
+]
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Rules to be applied before sending to Decision Engine
 
-### Making a Progressive Web App
+- If a business has made a profit in the last 12 months. The final value to be sent with a field `"preAssessment": "60"` which means the Loan is favored to be approved 60% of the requested value.
+  If the average asset value across 12 months is greater than the loan amount then `"preAssessment": "100"`
+- Default value to be used `20`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## The Final output to be sent to the decision engine would contain minimum details such as
 
-### Advanced Configuration
+- Business Details such as:
+  - Name
+  - Year established
+  - Summary of Profit or loss by the year
+- preAssessment value as per the rules
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Judging Criteria
 
-### Deployment
+- Engineering principles & standards
+- System extensibility & Scalability
+- Testability
+- Brevity and Simplicity
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Bonus Points
 
-### `npm run build` fails to minify
+- Docker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## FAQ
