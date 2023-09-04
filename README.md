@@ -14,6 +14,14 @@ I created Business Loan application system. I used React as the frontend framewo
 - useFetchDecision - Contains code for fetch API for handling data from server.
 - Tool: React, React-Router, Custom Hook, Firebase, SCSS, and hooks
 
+## Images
+
+![Project Image](./src/assets/LogIn.png)
+![Project Image](./src/assets/Home.png)
+![Project Image](./src/assets/Form.png)
+![Project Image](./src/assets/BalanceSheet.png)
+![Project Image](./src/assets/OutCome.png)
+
 ## Requirement
 
 The goal of the project is to build a simple business loan application system.
@@ -125,9 +133,3 @@ sheet = [
 - System extensibility & Scalability
 - Testability
 - Brevity and Simplicity
-
-## Bonus Points
-
-- Docker
-
-## FAQ
